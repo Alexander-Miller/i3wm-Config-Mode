@@ -4,7 +4,7 @@
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ()
-;; Homepage: TODO
+;; Homepage: https://github.com/Alexander-Miller/i3wm-Config-Mode
 ;; Version: 1.0
 ;; Keywords: i3, config, syntax highlighting, font-lock
 
