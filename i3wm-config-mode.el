@@ -81,8 +81,7 @@
      ( ,(rx (seq
              symbol-start
              "$"
-             (1+ (or "-" "_" word))
-             symbol-end))
+             (1+ (or "-" "_" word))))
        0
        font-lock-constant-face)
 
