@@ -172,7 +172,6 @@
      ( ,(rx (seq
              bow
              (or
-              (seq bow (1+ (or "_" alnum)) eow "." bow (1+ (or "_"  alnum)) eow)
               "scratchpad"
               "workspace_auto_back_and_forth"
               "workspace_buttons"
@@ -240,6 +239,13 @@
              "mouse"))
        0
        font-lock-constant-face)
+
+     ;; client.*color* assigments
+     ( ,(rx
+         (seq bow (1+ (or "_" word)) eow "." bow (1+ (or "_"  word)) eow))
+         0
+         font-lock-keyword-face
+         t)
 
      ;; Values assignments after a `:'
      ( ,(rx (seq
