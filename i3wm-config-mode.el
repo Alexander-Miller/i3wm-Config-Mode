@@ -35,7 +35,8 @@
    `(
 
      ;; Actions
-     ( ,(rx (seq
+     ( ,(rx
+         (seq
              symbol-start
              (or
               "set"
@@ -77,19 +78,12 @@
        0
        font-lock-type-face)
 
-     ;; Variables
-     ( ,(rx (seq
-             symbol-start
-             "$"
-             (1+ (or "-" "_" word))))
-       0
-       font-lock-constant-face)
-
      ;; numbers
      ( ,(rx (seq
              symbol-start
-             (1+ num)))
-       0
+             (? (or "-" "+"))
+             (group-n 1 (1+ num))))
+       1
        font-lock-constant-face)
 
      ;; value part of `set x y'
@@ -109,10 +103,20 @@
      ( ,(rx (or
              (seq "bindsym" (1+ space) (? (seq "--release" (1+ space))))
              "+")
-            (group-n 1 (1+ (or word "_"))))
+            (group-n 1 (1+ (or word "_")))
+            )
        1
        font-lock-variable-name-face
-       )
+       t)
+
+     ;; Variables
+     ( ,(rx (seq
+             symbol-start
+             "$"
+             (1+ (or "-" "_" word))))
+       0
+       font-lock-constant-face
+       t)
 
      ;; units of measurement
      ( ,(rx (seq
@@ -240,13 +244,6 @@
        0
        font-lock-constant-face)
 
-     ;; client.*color* assigments
-     ( ,(rx
-         (seq bow (1+ (or "_" word)) eow "." bow (1+ (or "_"  word)) eow))
-         0
-         font-lock-keyword-face
-         t)
-
      ;; Values assignments after a `:'
      ( ,(rx (seq
              (1+ nonl)
@@ -255,6 +252,16 @@
        1
        font-lock-builtin-face
        t)
+
+     ;; Block openers
+     ( ,(rx (seq
+             symbol-start
+             (group-n 1 (1+ (or "_" "-" word)))
+             symbol-end
+             (1+ space)
+             "{"))
+       1
+       font-lock-type-face)
 
      ;; + = | ( ) { } [ ] : etc
      ( ,(rx (or "+" "&&" "-" "=" "|" ":" "," ";"))
@@ -274,6 +281,13 @@
      ( ,(rx (seq symbol-start "i3-msg" symbol-end))
        0
        font-lock-function-name-face
+       t)
+
+     ;; client.*color* assigments
+     ( ,(rx
+         (seq symbol-start (1+ (or "_" word)) "." (1+ (or "_"  word)) symbol-end))
+       0
+       font-lock-keyword-face
        t)
 
      ;; enforce strings again
