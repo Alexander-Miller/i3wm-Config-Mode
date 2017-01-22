@@ -121,7 +121,7 @@
      ;; units of measurement
      ( ,(rx (seq
              (? (1+ num))
-             (group-n 1 (or "px" "ms" "ppt"))
+             (group-n 1 (or "px" "pixel" "ms" "ppt"))
              symbol-end))
        1
        font-lock-type-face)
@@ -180,7 +180,6 @@
               "workspace_auto_back_and_forth"
               "workspace_buttons"
               "workspace"
-              "pixel"
               "mode"
               "gaps"
               "output"
@@ -193,6 +192,7 @@
               "floating_modifier"
               "focus_follows_mouse"
               "smart_borders"
+              "smart_gaps"
               "mouse_warping"
               "force_display_urgency_hint"
               "new_window"
@@ -202,6 +202,7 @@
               "pango"
               "status_command"
               "i3bar_command"
+              "border"
               "position"
               "tray_padding"
               "tray_output"
@@ -237,6 +238,7 @@
              "i3bar"
              "yes"
              "no"
+             "on"
              "none"
              "top"
              "dock"
