@@ -241,6 +241,8 @@
              "on"
              "none"
              "top"
+             "invisible"
+             "hidden"
              "dock"
              "mouse"))
        0
