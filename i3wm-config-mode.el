@@ -90,6 +90,7 @@ the 'x' in 'for_window [x=y]'.")
   '((t :inherit font-lock-builtin-face))
   "Face for various operators like '&&', '+', and '|'.")
 
+;;;###autoload
 (define-derived-mode i3wm-config-mode conf-space-mode "i3wm Config")
 
 (font-lock-add-keywords
