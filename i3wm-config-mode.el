@@ -1,6 +1,6 @@
-;;; i3wm-config-mode.el --- Better syntax highlighting for i3wm's config file
+;;; i3wm-config-mode.el --- Better syntax highlighting for i3wm's config file -*- lexical-binding: t -*-
 
-;; Copyright (C) 2016 Alexander Miller
+;; Copyright (C) 2020 Alexander Miller
 
 ;; Author: Alexander Miller <alexanderm@web.de>
 ;; Package-Requires: ()
@@ -25,361 +25,319 @@
 
 ;;; Code:
 
-(defface i3wm-action-face
+(defface i3wm-config-verb
   '((t :inherit font-lock-function-name-face))
   "Face for actions or verbs like 'set', 'bindsym', 'move' etc.")
 
-(defface i3wm-modifiers-face
+(defface i3wm-config-flag
   '((t :inherit font-lock-type-face))
-  "Face for modifiers like '--release' and '--no-startup-id'.")
+  "Face for flags like '--release' and '--no-startup-id'.")
 
-(defface i3wm-numbers-face
-  '((t :inherit font-lock-constant-face))
-  "Face for numbers.")
-
-(defface i3wm-value-assign-face
-  '((t :inherit font-lock-variable-name-face))
-  "Face value assignments - e.g. the 'y' in 'set x y'.")
-
-(defface i3wm-bindsym-key-face
-  '((t :inherit font-lock-variable-name-face))
-  "Face for the keys used in bindsym assignments.")
-
-(defface i3wm-variable-face
+(defface i3wm-config-variable
   '((t :inherit font-lock-constant-face))
   "Face for $variables.")
 
-(defface i3wm-unit-face
+(defface i3wm-config-value-assign
+  '((t :inherit font-lock-variable-name-face))
+  "Face for value assignments - e.g. the 'y' in 'set x y'.")
+
+(defface i3wm-config-numbers
+  '((t :inherit font-lock-constant-face))
+  "Face for numbers.")
+
+(defface i3wm-config-bindsym-key
+  '((t :inherit font-lock-variable-name-face))
+  "Face for the keys used in bindsym assignments.")
+
+(defface i3wm-config-unit
   '((t :inherit font-lock-type-face))
   "Face for units like 'px', 'ms', 'ppt'.")
 
-(defface i3wm-for-window-predictate-face
+(defface i3wm-config-for-window-predictate
   '((t :inherit font-lock-builtin-face))
   "Face for the predicates in for_window assignments -
 the 'x' in 'for_window [x=y]'.")
 
-(defface i3wm-exec-face
+(defface i3wm-config-exec
   '((t :inherit font-lock-builtin-face))
   "Face for the text inside an exec statement.")
 
-(defface i3wm-modifier-face
+(defface i3wm-config-adjective
   '((t :inherit font-lock-type-face))
-  "Face for action modifiers like 'floating', 'tabbed', 'sticky' or 'current'.")
+  "Face for adjectives and modifiers like 'floating', 'tabbed', 'sticky' or 'current'.")
 
-(defface i3wm-keyword-face
+(defface i3wm-config-noun
   '((t :inherit font-lock-keyword-face))
-  "Face for fixed keywords like 'workspace', 'mode', 'position' or 'fullscreen'.")
+  "Face for fixed noun & keywords like 'workspace', 'mode', 'position' or 'fullscreen'.")
 
-(defface i3wm-constant-face
+(defface i3wm-config-constant
   '((t :inherit font-lock-constant-face))
   "Face for constant values like 'top', 'invisble', 'yes' or 'no'.")
 
-(defface i3wm-block-opener-face
-  '((t :inherit font-lock-type-face))
-  "Face for the names of items denoting blocks like 'bar {}' and 'colors {}'.")
-
-(defface i3wm-string-face
-  '((t :inherit font-lock-string-face))
-  "Face for text enclosed in quotes.")
-
-(defface i3wm-comment-face
-  '((t :inherit font-lock-comment-face))
-  "Face for comments.")
-
-(defface i3wm-operator-face
+(defface i3wm-config-operator
   '((t :inherit font-lock-builtin-face))
   "Face for various operators like '&&', '+', and '|'.")
 
+(defface i3wm-config-block-name
+  '((t :inherit font-lock-type-face))
+  "Face for curly brace delimited block name like 'colors { ... }'.")
+
+(defvar i3wm-config-font-lock-keywords
+  `(
+    ;; Bindsym keys
+    ( ,(rx
+        (group-n 1 "bindsym")
+        (0+ space)
+        (opt
+         (group-n 2 (? "--" (1+ (or alnum "-" "_")))))
+        (0+ space)
+        (opt
+         (or (group-n 3 "$" (1+ alnum))
+             (group-n 4 (1+ alnum)))
+         (? (group-n 5 "+")))
+        (opt
+         (or (group-n 6 "$" (1+ alnum))
+             (group-n 7 (1+ alnum)))
+         (? (group-n 8 "+")))
+        (opt
+         (or (group-n 9 "$" (1+ alnum))
+             (group-n 10 (1+ alnum)))
+         (? (group-n 11 "+"))))
+      (1 'i3wm-config-verb nil t)
+      (2 'i3wm-config-flag nil t)
+      (3 'i3wm-config-variable nil t)
+      (4 'i3wm-config-bindsym-key nil t)
+      (5 'i3wm-config-operator nil t)
+      (6 'i3wm-config-variable nil t)
+      (7 'i3wm-config-bindsym-key nil t)
+      (8 'i3wm-config-operator nil t)
+      (9 'i3wm-config-variable nil t)
+      (10 'i3wm-config-bindsym-key nil t)
+      (11 'i3wm-config-operator nil t))
+
+    ;; Exec
+    ( ,(rx
+        (group-n 1 "exec" (? "_" (1+ alnum)))
+        (0+ space)
+        (opt
+         (group-n 2 (? "--" (1+ (or alnum "-" "_"))))
+         (0+ space)
+         (opt
+          (group-n 3 (1+ any) eol))))
+      (1 'i3wm-config-verb nil t)
+      (2 'i3wm-config-flag nil t)
+      (3 'i3wm-config-exec nil t))
+
+    ;; floating modifier set
+    ( ,(rx
+        (group-n 1 "floating_modifier")
+        (0+ space)
+        (opt
+         (group-n 2 "$" (1+ (or "-" "_" alnum)))))
+      (1 'i3wm-config-noun nil t)
+      (2 'i3wm-config-value-assign nil t))
+
+
+    ;; Set
+    ( ,(rx
+        (group-n 1 "set")
+        (0+ space)
+        (opt
+         (group-n 2 "$" (1+ (or "-" "_" alnum)))
+         (opt
+          (group-n 3 (1+ any) eol))))
+      (1 'i3wm-config-verb nil t)
+      (2 'i3wm-config-variable nil t)
+      (3 'i3wm-config-value-assign nil t))
+
+    ;; Colon assignments
+    ( ,(rx (seq
+            (1+ nonl)
+            ":"
+            (group-n 1 (1+ (not (any "\n" "\""))))))
+      1
+      'i3wm-config-value-assign)
+
+    ;; Block openers
+    ( ,(rx (seq
+            symbol-start
+            (group-n 1 (1+ (or "_" "-" word)))
+            symbol-end
+            (opt (1+ space) "\"" (0+ any) "\"")
+            (1+ space)
+            "{"))
+      1 'i3wm-config-block-name)
+
+    ;; Verbs
+    ( ,(rx
+        (seq
+         symbol-start
+         (or
+          "set"
+          "disable"
+          "set_from_resource"
+          "back_and_forth"
+          "bindsym"
+          "to"
+          "or"
+          "exec"
+          "exec_always"
+          "kill"
+          "nop"
+          "move"
+          "show"
+          "split"
+          "focus"
+          "toggle"
+          "i3-msg"
+          "reload"
+          "restart"
+          "resize"
+          "grow"
+          "shrink"
+          "plus"
+          "minus"
+          "enable"
+          "assign"
+          "for_window")
+         symbol-end))
+      0
+      'i3wm-config-verb)
+
+    ;; Adjectives/modifiers
+    ( ,(rx (seq
+            symbol-start
+            (or
+             "tabbed"
+             "stacking"
+             "left"
+             "right"
+             "up"
+             "down"
+             "urgent"
+             "sticky"
+             "current"
+             "global"
+             "outer"
+             "inner"
+             "latest"
+             "floating"
+             "mode_toggle"
+             "all"
+             "h"
+             "v")
+            symbol-end))
+      0
+      'i3wm-config-adjective)
+
+    ;; Nouns
+    ( ,(rx (seq
+            symbol-start
+            (or
+             "scratchpad"
+             "workspace_auto_back_and_forth"
+             "workspace_buttons"
+             "workspace"
+             "mode"
+             "gaps"
+             "output"
+             "parent"
+             "child"
+             "container"
+             "layout"
+             "height"
+             "width"
+             "focus_follows_mouse"
+             "smart_borders"
+             "smart_gaps"
+             "mouse_warping"
+             "force_display_urgency_hint"
+             "new_window"
+             "new_float"
+             "font"
+             "focus_on_window_activation"
+             "pango"
+             "status_command"
+             "i3bar_command"
+             "border"
+             "position"
+             "tray_padding"
+             "tray_output"
+             "strip_workspace_numbers"
+             "binding_mode_indicator"
+             "background"
+             "binding_mode"
+             "statusline"
+             "separator_symbol"
+             "separator"
+             "focused_workspace"
+             "active_workspace"
+             "inactive_workspace"
+             "urgent_workspace"
+             "number"
+             "window"
+             "fullscreen")
+            symbol-end))
+      (0 'i3wm-config-noun nil t))
+
+    ;; numbers
+    ( ,(rx (seq
+            symbol-start
+            (? (or "-" "+"))
+            (group-n 1 (1+ num))))
+      1
+      'i3wm-config-numbers)
+
+    ;; Constants
+    ( ,(rx
+        (seq
+         symbol-start
+         (or
+          "i3bar"
+          "yes"
+          "no"
+          "on"
+          "none"
+          "top"
+          "invisible"
+          "hidden"
+          "dock"
+          "mouse")
+         symbol-end))
+      0 'i3wm-config-constant)
+
+    ;; Units
+    ( ,(rx (seq
+            (? (1+ num))
+            (group-n 1 (or "px" "pixel" "ms" "ppt"))
+            symbol-end))
+      1 'i3wm-config-unit)
+
+    ;; + = | : etc
+    ( ,(rx (or "+" "&&" "-" "=" "|" ":" "," ";"))
+      0 'i3wm-config-operator)
+
+    ;; for_window predicates
+    ( ,(rx (or
+            "class"
+            "title"
+            "instance"
+            "window_role"
+            "window_type"))
+      0 'i3wm-config-for-window-predictate)
+
+    ;; client.*color* assigments
+    ( ,(rx (seq
+            symbol-start
+            (1+ (or "_" word))
+            "."
+            (1+ (or "_"  word))
+            symbol-end))
+      0 'i3wm-config-noun)))
+
 ;;;###autoload
-(define-derived-mode i3wm-config-mode conf-space-mode "i3wm Config")
-
-(font-lock-add-keywords
- 'i3wm-config-mode
- `(
-
-   ;; Actions
-   ( ,(rx
-       (seq
-        symbol-start
-        (or
-         "set"
-         "disable"
-         "set_from_resource"
-         "back_and_forth"
-         "bindsym"
-         "to"
-         "or"
-         "exec"
-         "exec_always"
-         "kill"
-         "nop"
-         "move"
-         "show"
-         "split"
-         "focus"
-         "toggle"
-         "i3-msg"
-         "reload"
-         "restart"
-         "resize"
-         "grow"
-         "shrink"
-         "plus"
-         "minus"
-         "enable"
-         "assign"
-         "for_window")
-        symbol-end))
-     0
-     'i3wm-action-face)
-
-   ;; --modifiers
-   ( ,(rx (seq
-           symbol-start
-           (or "--no-startup-id" "--release")
-           symbol-end))
-     0
-     'i3wm-modifiers-face)
-
-   ;; numbers
-   ( ,(rx (seq
-           symbol-start
-           (? (or "-" "+"))
-           (group-n 1 (1+ num))))
-     1
-     'i3wm-numbers-face)
-
-   ;; value part of `set x y'
-   ( ,(rx (seq
-           bol
-           "set"
-           (? "_from_resource")
-           (1+ space)
-           "$" (1+ (or "_" "-" word))
-           (1+ space)
-           (group-n 1 symbol-start (1+ (or "-" "_" alnum)) symbol-end)))
-     1
-     'i3wm-value-assign-face
-     t)
-
-   ;; Keys used in `bindsym'
-   ( ,(rx (or
-           (seq "bindsym" (1+ space) (? (seq "--release" (1+ space))))
-           "+")
-          (group-n 1 (1+ (or word "_")))
-          )
-     1
-     'i3wm-bindsym-key-face
-     t)
-
-   ;; Variables
-   ( ,(rx (seq
-           symbol-start
-           "$"
-           (1+ (or "-" "_" word))))
-     0
-     'i3wm-variable-face
-     t)
-
-   ;; units of measurement
-   ( ,(rx (seq
-           (? (1+ num))
-           (group-n 1 (or "px" "pixel" "ms" "ppt"))
-           symbol-end))
-     1
-     'i3wm-unit-face)
-
-   ;; `for_window' predicates
-   ( ,(rx (or
-           "class"
-           "title"
-           "instance"
-           "window_role"
-           "window_type"))
-     0
-     'i3wm-for-window-predictate-face)
-
-   ;; Command part of an `exec' statement
-   ( ,(rx (seq
-           "exec"
-           (? "_always")
-           (1+ space)
-           (? "--" (1+ (or "-" word)) (1+ space))
-           (group-n 1 (1+ any))
-           eol))
-     1
-     'i3wm-exec-face
-     t)
-
-   ;; Action modifiers
-   ( ,(rx (seq
-           (or
-            "tabbed"
-            "stacking"
-            "left"
-            "right"
-            "up"
-            "down"
-            "urgent"
-            "sticky"
-            "current"
-            "global"
-            "outer"
-            "inner"
-            "latest"
-            "floating"
-            "mode_toggle"
-            "all"
-            )
-           symbol-end))
-     0
-     'i3wm-modifier-face)
-
-   ;; Keywords
-   ( ,(rx (seq
-           bow
-           (or
-            "scratchpad"
-            "workspace_auto_back_and_forth"
-            "workspace_buttons"
-            "workspace"
-            "mode"
-            "gaps"
-            "output"
-            "parent"
-            "child"
-            "container"
-            "layout"
-            "height"
-            "width"
-            "floating_modifier"
-            "focus_follows_mouse"
-            "smart_borders"
-            "smart_gaps"
-            "mouse_warping"
-            "force_display_urgency_hint"
-            "new_window"
-            "new_float"
-            "font"
-            "focus_on_window_activation"
-            "pango"
-            "status_command"
-            "i3bar_command"
-            "border"
-            "position"
-            "tray_padding"
-            "tray_output"
-            "strip_workspace_numbers"
-            "binding_mode_indicator"
-            "background"
-            "binding_mode"
-            "statusline"
-            "separator_symbol"
-            "separator"
-            "focused_workspace"
-            "active_workspace"
-            "inactive_workspace"
-            "urgent_workspace"
-            "number"
-            "window"
-            "fullscreen")
-           eow
-           ))
-     0
-     'i3wm-keyword-face)
-
-   ;; single letter modifiers
-   ( ,(rx (seq
-           symbol-start
-           (or "h" "x" "v")
-           symbol-end))
-     0
-     'i3wm-unit-face)
-
-   ;; Constant values
-   ( ,(rx (or
-           "i3bar"
-           "yes"
-           "no"
-           "on"
-           "none"
-           "top"
-           "invisible"
-           "hidden"
-           "dock"
-           "mouse"))
-     0
-     'i3wm-constant-face)
-
-   ;; Values assignments after a `:'
-   ( ,(rx (seq
-           (1+ nonl)
-           ":"
-           (group-n 1 (1+ (not (any "\n" "\""))))))
-     1
-     'i3wm-value-assign-face
-     t)
-
-   ;; Block openers
-   ( ,(rx (seq
-           symbol-start
-           (group-n 1 (1+ (or "_" "-" word)))
-           symbol-end
-           (1+ space)
-           "{"))
-     1
-     'i3wm-block-opener-face)
-
-   ;; + = | : etc
-   ( ,(rx (or "+" "&&" "-" "=" "|" ":" "," ";"))
-     0
-     'i3wm-operator-face)
-
-   ;; commands with more or less arbitrary values
-   ( ,(rx (seq
-           (or "tray_output" "status_command" "i3bar_command")
-           (1+ space)
-           (group-n 1 (1+ any) eol)))
-     1
-     'i3wm-value-assign-face
-     t)
-
-   ;; i3-msg, which needs to overwrite the `exec' highlight
-   ( ,(rx (seq
-           symbol-start
-           "i3-msg"
-           symbol-end))
-     0
-     'i3wm-action-face
-     t)
-
-   ;; client.*color* assigments
-   ( ,(rx (seq
-           symbol-start
-           (1+ (or "_" word))
-           "."
-           (1+ (or "_"  word))
-           symbol-end))
-     0
-     'i3wm-keyword-face
-     t)
-
-   ;; enforce strings again
-   ( ,(rx (seq
-           "\"" (1+ (not (any "\""))) "\""))
-     0
-     'i3wm-string-face
-     t)
-
-   ;; enforce commets again
-   ( ,(rx (seq
-           "#"
-           (? (1+ nonl))))
-     0
-     'i3wm-comment-face
-     t)
-
-   ))
+(define-derived-mode i3wm-config-mode conf-space-mode "i3wm Config"
+  (font-lock-add-keywords nil i3wm-config-font-lock-keywords 'set))
 
 (provide 'i3wm-config-mode)
 
