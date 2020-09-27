@@ -3,10 +3,10 @@
 ;; Copyright (C) 2020 Alexander Miller
 
 ;; Author: Alexander Miller <alexanderm@web.de>
-;; Package-Requires: ()
+;; Package-Requires: ((emacs "24.1"))
 ;; Homepage: https://github.com/Alexander-Miller/i3wm-Config-Mode
 ;; Version: 1.0
-;; Keywords: i3, config, syntax highlighting, font-lock
+;; Keywords: faces, languages, i3wm, font-lock
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
+;; Better syntax highlighting for i3wm's config. Everything else is inherited
+;; from `conf-space-mode.'
 
 ;;; Code:
 
