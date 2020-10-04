@@ -22,10 +22,17 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; Better syntax highlighting for i3wm's config. Everything else is inherited
+;; Better syntax highlighting for i3wm's config.  Everything else is inherited
 ;; from `conf-space-mode.'
 
 ;;; Code:
+
+(defgroup i3wm-config nil
+  "Configuration options for i3wm-config-mode."
+  :prefix "i3wm-config-"
+  :group 'conf
+  :link '(url-link :tag "URL" "https://github.com/Alexander-Miller/i3wm-Config-Mode")
+  :link '(emacs-commentary-link :tag "Commentary" "i3wm-config-mode.el"))
 
 (defface i3wm-config-verb
   '((t :inherit font-lock-function-name-face))
