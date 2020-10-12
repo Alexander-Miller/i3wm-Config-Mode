@@ -348,6 +348,9 @@ the 'x' in 'for_window [x=y]'.")
 (define-derived-mode i3wm-config-mode conf-space-mode "i3wm Config"
   (font-lock-add-keywords nil i3wm-config-font-lock-keywords 'set))
 
+;;;###autoload
+(add-to-list 'auto-mode-alist '("/i3/config\\'" . i3wm-config-mode))
+
 (provide 'i3wm-config-mode)
 
 ;;; i3wm-config-mode.el ends here

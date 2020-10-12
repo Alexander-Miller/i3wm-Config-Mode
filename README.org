@@ -17,8 +17,9 @@ faces, making sure that they fit in with any theme.
 Features and settings outside font-locking are not touched and will be inherited from ~conf-space-mode~.
 
 ** How to use
-Place the line ~# -*- mode: i3wm-config -*-~ at the top of your i3wm config file (as seen in the first screenshot) and
-Emacs will automatically load and activate ~i3wm-config-mode~ when the file is opened.
+This mode will activate for files whose path ends with ~.../i3/config~. If you use a different name, you can activate
+this mode via a file-local variable by placing the line ~# -*- mode: i3wm-config -*-~ at the top of your i3wm config
+file (as seen in the first screenshot).
 
 ** Known limitations
 The regular expressions used here have not been tested on config files other than my own making it unlikely they will
