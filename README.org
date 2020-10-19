@@ -17,7 +17,7 @@ faces, making sure that they fit in with any theme.
 Features and settings outside font-locking are not touched and will be inherited from ~conf-space-mode~.
 
 ** How to use
-This mode will activate for files whose path ends with ~.../i3/config~. If you use a different name, you can activate
+This mode will activate for files whose path ends with ~...i3/config~. If you use a different name, you can activate
 this mode via a file-local variable by placing the line ~# -*- mode: i3wm-config -*-~ at the top of your i3wm config
 file (as seen in the first screenshot).
 

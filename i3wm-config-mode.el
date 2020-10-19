@@ -349,7 +349,7 @@ the 'x' in 'for_window [x=y]'.")
   (font-lock-add-keywords nil i3wm-config-font-lock-keywords 'set))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("/i3/config\\'" . i3wm-config-mode))
+(add-to-list 'auto-mode-alist '("i3/config\\'" . i3wm-config-mode))
 
 (provide 'i3wm-config-mode)
 
