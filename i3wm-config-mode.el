@@ -124,6 +124,23 @@ the 'x' in 'for_window [x=y]'.")
       (10 'i3wm-config-bindsym-key nil t)
       (11 'i3wm-config-operator nil t))
 
+    ;; set from resources
+    ( ,(rx
+        (group-n 1 "set_from_resources")
+        (0+ space)
+        (opt
+         (group-n 2 "$" (1+ alnum))
+         (opt
+          (0+ space)
+          (group-n 3 (1+ word))
+          (opt
+           (0+ space)
+           (group-n 4 (1+ any))))))
+      (1 'i3wm-config-verb nil t)
+      (2 'i3wm-config-variable nil t)
+      (3 'i3wm-config-value-assign nil t)
+      (4 'i3wm-config-constant nil t))
+
     ;; Exec
     ( ,(rx
         (group-n 1 "exec" (? "_" (1+ alnum)))
