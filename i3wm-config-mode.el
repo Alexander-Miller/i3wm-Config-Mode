@@ -124,9 +124,9 @@ the 'x' in 'for_window [x=y]'.")
       (10 'i3wm-config-bindsym-key nil t)
       (11 'i3wm-config-operator nil t))
 
-    ;; set from resources
+    ;; set from resource
     ( ,(rx
-        (group-n 1 "set_from_resources")
+        (group-n 1 "set_from_resource")
         (0+ space)
         (opt
          (group-n 2 "$" (1+ alnum))
