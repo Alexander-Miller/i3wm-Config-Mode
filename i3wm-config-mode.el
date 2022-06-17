@@ -225,7 +225,8 @@ the 'x' in 'for_window [x=y]'.")
           "minus"
           "enable"
           "assign"
-          "for_window")
+          "for_window"
+          "no_focus")
          symbol-end))
       0
       'i3wm-config-verb)
