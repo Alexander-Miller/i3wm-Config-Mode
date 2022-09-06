@@ -303,7 +303,8 @@ the 'x' in 'for_window [x=y]'.")
              "urgent_workspace"
              "number"
              "window"
-             "fullscreen")
+             "fullscreen"
+             "default_orientation")
             symbol-end))
       (0 'i3wm-config-noun nil t))
 
@@ -329,7 +330,10 @@ the 'x' in 'for_window [x=y]'.")
           "invisible"
           "hidden"
           "dock"
-          "mouse")
+          "mouse"
+          "horizontal"
+          "vertical"
+          "auto")
          symbol-end))
       0 'i3wm-config-constant)
 
