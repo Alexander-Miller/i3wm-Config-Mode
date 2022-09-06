@@ -305,7 +305,8 @@ the 'x' in 'for_window [x=y]'.")
              "window"
              "fullscreen"
              "default_orientation"
-             "workspace_layout")
+             "workspace_layout"
+             "popup_during_fullscreen")
             symbol-end))
       (0 'i3wm-config-noun nil t))
 
@@ -337,7 +338,10 @@ the 'x' in 'for_window [x=y]'.")
           "auto"
           "default"
           "stacking"
-          "tabbed")
+          "tabbed"
+          "smart"
+          "ignore"
+          "leave_fullscreen")
          symbol-end))
       0 'i3wm-config-constant)
 
