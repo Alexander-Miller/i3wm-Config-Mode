@@ -304,7 +304,8 @@ the 'x' in 'for_window [x=y]'.")
              "number"
              "window"
              "fullscreen"
-             "default_orientation")
+             "default_orientation"
+             "workspace_layout")
             symbol-end))
       (0 'i3wm-config-noun nil t))
 
@@ -333,7 +334,10 @@ the 'x' in 'for_window [x=y]'.")
           "mouse"
           "horizontal"
           "vertical"
-          "auto")
+          "auto"
+          "default"
+          "stacking"
+          "tabbed")
          symbol-end))
       0 'i3wm-config-constant)
 
